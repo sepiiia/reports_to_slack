@@ -13,7 +13,6 @@ SLACK_CANAL_VENTASECI  = os.environ.get("SLACK_CANAL_VENTASECI")
 
 # ---- FIN CONFIGURACIÓN ----
 
-
 hoy          = date.today()
 ayer_reporte = hoy - timedelta(days=1)
 dia_actual   = ayer_reporte.day
@@ -130,7 +129,7 @@ for sem_num, inicio, fin in semanas:
 nombre_mes = ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
               "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"][mes_actual-1]
 ytd_emoji = "✅" if ytd_2026 >= ytd_2025 else "🔴"
-ene_emoji = "✅" if ene_2026 >= ene_2025 else "🔴"
+
 mes_emoji = "✅" if mes_2026 >= mes_2025_mismo else "🔴"
 
 mensaje = f"""📊 *VENTAS ECI | {ayer_reporte.strftime('%d/%m/%Y')}*
@@ -140,8 +139,8 @@ mensaje = f"""📊 *VENTAS ECI | {ayer_reporte.strftime('%d/%m/%Y')}*
    2026: {ytd_2026:,} uds | 2025: {ytd_2025:,} uds | {ytd_pct:+.1f}%
    {"🎯 Faltan " + f"{ytd_faltan:,} uds para igualar 2025" if ytd_faltan > 0 else "🏆 Superado 2025 en " + f"{abs(ytd_diff):,} uds"}
 
-{ene_emoji} *Enero 2026 vs Enero 2025*
-   2026: {ene_2026:,} uds | 2025: {ene_2025:,} uds | {ene_pct:+.1f}%
+{meses_anteriores_texto}   
+
 
 {mes_emoji} *{nombre_mes} 2026 (1-{dia_actual}) vs {nombre_mes} 2025 (1-{dia_actual})*
    2026: {mes_2026:,} uds | 2025: {mes_2025_mismo:,} uds | {mes_pct:+.1f}%
@@ -158,7 +157,7 @@ print(mensaje)
 r_slack = requests.post(
     "https://slack.com/api/chat.postMessage",
     headers={"Authorization": f"Bearer {SLACK_TOKEN}", "Content-Type": "application/json"},
-    json={"channel": SLACK_CANAL_VENTASECI, "text": mensaje, "mrkdwn": True}
+    json={"channel": SLACK_CANAL, "text": mensaje, "mrkdwn": True}
 )
 print("✅ Texto enviado" if r_slack.json().get("ok") else f"❌ {r_slack.json().get('error')}")
 
@@ -181,10 +180,8 @@ requests.post(upload_url, files={"file": imagen.getvalue()})
 requests.post(
     "https://slack.com/api/files.completeUploadExternal",
     headers={"Authorization": f"Bearer {SLACK_TOKEN}", "Content-Type": "application/json"},
-    json={"files": [{"id": file_id}], "channel_id": SLACK_CANAL_VENTASECI}
+    json={"files": [{"id": file_id}], "channel_id": SLACK_CANAL}
 )
 print("✅ Gráfico enviado")
-
-
 
 
