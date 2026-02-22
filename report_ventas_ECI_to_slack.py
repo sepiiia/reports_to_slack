@@ -157,7 +157,7 @@ print(mensaje)
 r_slack = requests.post(
     "https://slack.com/api/chat.postMessage",
     headers={"Authorization": f"Bearer {SLACK_TOKEN}", "Content-Type": "application/json"},
-    json={"channel": SLACK_CANAL, "text": mensaje, "mrkdwn": True}
+    json={"channel": SLACK_CANAL_VENTASECI, "text": mensaje, "mrkdwn": True}
 )
 print("✅ Texto enviado" if r_slack.json().get("ok") else f"❌ {r_slack.json().get('error')}")
 
@@ -180,7 +180,7 @@ requests.post(upload_url, files={"file": imagen.getvalue()})
 requests.post(
     "https://slack.com/api/files.completeUploadExternal",
     headers={"Authorization": f"Bearer {SLACK_TOKEN}", "Content-Type": "application/json"},
-    json={"files": [{"id": file_id}], "channel_id": SLACK_CANAL}
+    json={"files": [{"id": file_id}], "channel_id": SLACK_CANAL_VENTASECI}
 )
 print("✅ Gráfico enviado")
 
