@@ -15,7 +15,7 @@ jobs:
           python-version: '3.11'
       
       - name: Instalar dependencias
-        run: pip install requests pandas openpyxl
+        run: pip install requests pandas openpyxl matplotlib
       
       - name: Ejecutar pipeline
         env:
