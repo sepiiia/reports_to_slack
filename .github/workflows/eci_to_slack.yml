@@ -1,1 +1,26 @@
 
+name: From ECI Sales to Slack
+
+on:
+  workflow_dispatch:  # Se dispara desde fuera via API
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Instalar dependencias
+        run: pip install requests pandas openpyxl
+      
+      - name: Ejecutar pipeline
+        env:
+          SLACK_TOKEN:     ${{ secrets.SLACK_TOKEN }}
+          SLACK_CANAL_VENTASECI: ${{ secrets.SLACK_CANAL_VENTASECI }}
+          SUPABASE_URL:    ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY:    ${{ secrets.SUPABASE_KEY }}
+        run: python report_ventas_ECI_to_slack.py
