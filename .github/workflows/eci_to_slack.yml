@@ -1,9 +1,8 @@
-
 name: From ECI Sales to Slack
-
 on:
-  workflow_dispatch:  # Se dispara desde fuera via API
-
+  schedule:
+    - cron: '0 8 * * *'   # 10:00 Madrid (UTC+2 verano)
+  workflow_dispatch:
 jobs:
   pipeline:
     runs-on: ubuntu-latest
